@@ -111,7 +111,7 @@ function Index() {
       <section id="top" className="relative flex min-h-[100svh] items-end overflow-hidden bg-ink text-ink-foreground">
         <img src={hero} alt="Infinity pool at sunset overlooking the Andaman Sea" width={1920} height={1088} className="animate-slowzoom absolute inset-0 h-full w-full object-cover" />
         <div className="veil absolute inset-0" />
-        <div className="relative mx-auto w-full max-w-7xl px-6 pb-40 md:pb-48">
+        <div className="relative mx-auto w-full max-w-7xl px-6 pb-24 md:pb-28">
           <p className="eyebrow animate-rise text-gold">Est. 1998 · Pantai Datai</p>
           <h1 className="animate-rise mt-5 max-w-4xl text-5xl leading-[1.02] md:text-8xl" style={{ animationDelay: ".15s" }}>
             Where the rainforest <em className="text-gold">meets</em> the sea.
@@ -120,7 +120,6 @@ function Index() {
             Eighty-two villas and suites tucked into ten-million-year-old jungle on Langkawi's northwest shore.
           </p>
         </div>
-
       </section>
 
       {/* Intro */}
