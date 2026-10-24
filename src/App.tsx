@@ -1,28 +1,10 @@
-import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import hero from "@/assets/hero.jpg";
-import suite from "@/assets/suite.jpg";
-import spa from "@/assets/spa.jpg";
-import dining from "@/assets/dining.jpg";
+import hero from "@/assets/hero.webp";
+import suite from "@/assets/suite.webp";
+import spa from "@/assets/spa.webp";
+import dining from "@/assets/dining.webp";
 
-export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: "Serai Tanjung Langkawi — Rainforest & Sea Resort, Malaysia" },
-      {
-        name: "description",
-        content:
-          "A five-star hillside sanctuary on Langkawi's northwest coast. Ocean-view villas, Malay fine dining and a rainforest spa.",
-      },
-      { property: "og:title", content: "Serai Tanjung Langkawi" },
-      {
-        property: "og:description",
-        content: "Where the rainforest meets the Andaman Sea. A five-star Malaysian resort.",
-      },
-    ],
-  }),
-  component: Index,
-});
+import { WA_URL, WA_DISPLAY } from "@/lib/whatsapp";
 
 const nav = ["Stay", "Dine", "Wellness", "Experiences", "Offers"];
 
@@ -52,7 +34,7 @@ function useReveal() {
   }, []);
 }
 
-function Index() {
+export default function Index() {
   useReveal();
   const [scrolled, setScrolled] = useState(false);
   const [menu, setMenu] = useState(false);
@@ -84,8 +66,8 @@ function Index() {
             ))}
           </nav>
           <div className="flex items-center gap-4">
-            <a href="#contact" className="hidden border border-gold px-5 py-2.5 text-xs uppercase tracking-[0.2em] text-gold transition hover:bg-gold hover:text-ink sm:inline-block">
-              Contact
+            <a href={WA_URL} target="_blank" rel="noopener" className="hidden border border-gold px-5 py-2.5 text-xs uppercase tracking-[0.2em] text-gold transition hover:bg-gold hover:text-ink sm:inline-block">
+              WhatsApp
             </a>
             <button aria-label="Menu" onClick={() => setMenu(!menu)} className="lg:hidden">
               <div className="space-y-1.5">
@@ -200,7 +182,7 @@ function Index() {
             Six open-air pavilions beside a forest stream. Our therapists draw on traditional urut massage, jamu herbal
             tonics and warm pandan compresses.
           </p>
-          <a href="#contact" className="mt-10 inline-block border-b border-accent pb-1 text-xs uppercase tracking-[0.25em]">Ask about treatments →</a>
+          <a href={WA_URL} target="_blank" rel="noopener" className="mt-10 inline-block border-b border-accent pb-1 text-xs uppercase tracking-[0.25em]">Ask about treatments →</a>
         </div>
         <div className="reveal order-1 md:order-2">
           <img src={spa} alt="Stone bath with frangipani in a forest spa pavilion" loading="lazy" className="aspect-[4/5] w-full object-cover" />
@@ -256,7 +238,8 @@ function Index() {
           </div>
           <div className="text-sm opacity-80">
             <p className="eyebrow mb-4 text-gold">Contact</p>
-            <p><a href="tel:+6049500000" className="transition hover:text-gold">+60 4 950 0000</a></p>
+            <p><a href={WA_URL} target="_blank" rel="noopener" className="transition hover:text-gold">WhatsApp {WA_DISPLAY}</a></p>
+            <p><a href="tel:+601151198497" className="transition hover:text-gold">Call {WA_DISPLAY}</a></p>
             <p><a href="mailto:stay@seraitanjung.my" className="transition hover:text-gold">stay@seraitanjung.my</a></p>
           </div>
           <form onSubmit={(e) => e.preventDefault()} className="text-sm">
@@ -268,7 +251,7 @@ function Index() {
           </form>
         </div>
         <div className="border-t border-ink-foreground/10 py-6 text-center text-xs opacity-50">
-          © 2026 Serai Tanjung Resorts Sdn. Bhd. · A fictional brand for demonstration
+          © 2026 Serai Tanjung Resorts Sdn. Bhd. · A fictional brand for demonstration · photos are illustrative
         </div>
       </footer>
     </div>
