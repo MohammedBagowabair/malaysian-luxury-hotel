@@ -4,7 +4,8 @@ import suite from "@/assets/suite.webp";
 import spa from "@/assets/spa.webp";
 import dining from "@/assets/dining.webp";
 
-import { WA_URL, WA_DISPLAY } from "@/lib/whatsapp";
+import { waUrl, WA_DISPLAY, WA_DEFAULT_MSG } from "@/lib/whatsapp";
+import { LangSelect, useI18n } from "@/lib/i18n";
 
 const nav = ["Stay", "Dine", "Wellness", "Experiences", "Offers"];
 
@@ -36,6 +37,8 @@ function useReveal() {
 
 export default function Index() {
   useReveal();
+  const { t, h } = useI18n();
+  const wa = waUrl(t(WA_DEFAULT_MSG));
   const [scrolled, setScrolled] = useState(false);
   const [menu, setMenu] = useState(false);
   useEffect(() => {
@@ -46,60 +49,60 @@ export default function Index() {
   }, []);
 
   return (
-    <div className="overflow-x-hidden" suppressHydrationWarning>
+    <div className="overflow-x-hidden">
       {/* Header */}
       <header
         className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${
-          scrolled ? "bg-ink/95 py-3 backdrop-blur" : "py-6"
+          scrolled || menu ? "bg-ink/95 py-3 backdrop-blur" : "py-6"
         } text-ink-foreground`}
       >
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6">
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-6">
           <a href="#top" className="leading-none">
             <span className="block font-display text-2xl tracking-wide">Serai Tanjung</span>
-            <span className="eyebrow text-[0.55rem] text-gold">Langkawi · Malaysia</span>
+            <span className="eyebrow text-[0.55rem] text-gold">{t("Langkawi · Malaysia")}</span>
           </a>
-          <nav className="hidden gap-9 text-sm lg:flex">
+          <nav className="hidden gap-9 text-sm lg:flex" aria-label={t("Main navigation")}>
             {nav.map((n) => (
               <a key={n} href={`#${n.toLowerCase()}`} className="opacity-80 transition hover:text-gold hover:opacity-100">
-                {n}
+                {t(n)}
               </a>
             ))}
           </nav>
-          <div className="flex items-center gap-4">
-            <a href={WA_URL} target="_blank" rel="noopener" className="hidden border border-gold px-5 py-2.5 text-xs uppercase tracking-[0.2em] text-gold transition hover:bg-gold hover:text-ink sm:inline-block">
+          <div className="flex items-center gap-3 sm:gap-4">
+            <LangSelect id="lang-header" className="serai-lang" />
+            <a href={wa} target="_blank" rel="noopener" className="hidden border border-gold px-5 py-2.5 text-xs uppercase tracking-[0.2em] text-gold transition hover:bg-gold hover:text-ink sm:inline-block">
               WhatsApp
             </a>
-            <button aria-label="Menu" onClick={() => setMenu(!menu)} className="lg:hidden">
+            <button aria-label={t(menu ? "Close menu" : "Open menu")} aria-expanded={menu} onClick={() => setMenu(!menu)} className="flex h-11 w-11 items-center justify-center lg:hidden">
               <div className="space-y-1.5">
                 <span className="block h-px w-6 bg-ink-foreground" />
                 <span className="block h-px w-6 bg-ink-foreground" />
-                <span className="block h-px w-4 bg-ink-foreground" />
+                <span className="ms-auto block h-px w-4 bg-ink-foreground rtl:ms-0" />
               </div>
             </button>
           </div>
         </div>
         {menu && (
-          <div className="mt-3 flex flex-col gap-4 bg-ink px-6 py-6 lg:hidden">
+          <nav className="mt-3 flex flex-col gap-4 bg-ink px-6 py-6 lg:hidden" aria-label={t("Mobile navigation")}>
             {nav.map((n) => (
               <a key={n} onClick={() => setMenu(false)} href={`#${n.toLowerCase()}`} className="font-display text-2xl">
-                {n}
+                {t(n)}
               </a>
             ))}
-          </div>
+            <LangSelect id="lang-mobile" variant="full" className="serai-lang mt-2" />
+          </nav>
         )}
       </header>
 
       {/* Hero */}
       <section id="top" className="relative flex min-h-[100svh] items-end overflow-hidden bg-ink text-ink-foreground">
-        <img src={hero} alt="Infinity pool at sunset overlooking the Andaman Sea" width={1920} height={1088} className="animate-slowzoom absolute inset-0 h-full w-full object-cover" />
+        <img src={hero} alt={t("Infinity pool at sunset overlooking the Andaman Sea")} width={1920} height={1088} fetchPriority="high" className="absolute inset-0 h-full w-full object-cover" />
         <div className="veil absolute inset-0" />
         <div className="relative mx-auto w-full max-w-7xl px-6 pb-24 md:pb-28">
-          <p className="eyebrow animate-rise text-gold">Est. 1998 · Pantai Datai</p>
-          <h1 className="animate-rise mt-5 max-w-4xl text-5xl leading-[1.02] md:text-8xl" style={{ animationDelay: ".15s" }}>
-            Where the rainforest <em className="text-gold">meets</em> the sea.
-          </h1>
-          <p className="animate-rise mt-6 max-w-lg text-base opacity-85 md:text-lg" style={{ animationDelay: ".3s" }}>
-            Eighty-two villas and suites tucked into ten-million-year-old jungle on Langkawi's northwest shore.
+          <p className="eyebrow animate-rise text-gold">{t("Est. 1998 · Pantai Datai")}</p>
+          <h1 className="hero-title mt-5 max-w-4xl text-5xl leading-[1.02] md:text-8xl" {...h('Where the rainforest <em class="text-gold">meets</em> the sea.')} />
+          <p className="animate-rise mt-6 max-w-lg text-base opacity-85 md:text-lg" style={{ animationDelay: ".15s" }}>
+            {t("Eighty-two villas and suites tucked into ten-million-year-old jungle on Langkawi's northwest shore.")}
           </p>
         </div>
       </section>
@@ -107,19 +110,18 @@ export default function Index() {
       {/* Intro */}
       <section className="mx-auto grid max-w-7xl gap-12 px-6 py-28 md:grid-cols-12 md:py-40">
         <div className="reveal md:col-span-5">
-          <p className="eyebrow text-accent">Selamat Datang</p>
-          <h2 className="mt-4 text-4xl leading-tight md:text-6xl">A quiet kind of luxury, rooted in Malay hospitality.</h2>
+          <p className="eyebrow text-accent">{t("Selamat Datang")}</p>
+          <h2 className="mt-4 text-4xl leading-tight md:text-6xl">{t("A quiet kind of luxury, rooted in Malay hospitality.")}</h2>
         </div>
         <div className="reveal space-y-6 text-muted-foreground md:col-span-6 md:col-start-7 md:pt-10">
           <p className="text-lg leading-relaxed">
-            Named for the lemongrass that lines our forest paths and the headland we call home, Serai Tanjung is a place to
-            slow down. Hornbills at breakfast, a private cove by noon, gamelan under the stars.
+            {t("Named for the lemongrass that lines our forest paths and the headland we call home, Serai Tanjung is a place to slow down. Hornbills at breakfast, a private cove by noon, gamelan under the stars.")}
           </p>
           <div className="grid grid-cols-3 gap-6 border-t pt-8 text-foreground">
             {[["82", "Villas & suites"], ["1.2km", "Private beach"], ["4", "Restaurants & bars"]].map(([n, l]) => (
               <div key={l}>
-                <div className="font-display text-4xl text-primary md:text-5xl">{n}</div>
-                <div className="mt-1 text-xs uppercase tracking-widest text-muted-foreground">{l}</div>
+                <div className="font-display text-4xl text-primary md:text-5xl" dir="ltr">{n}</div>
+                <div className="mt-1 text-xs uppercase tracking-widest text-muted-foreground">{t(l)}</div>
               </div>
             ))}
           </div>
@@ -131,21 +133,21 @@ export default function Index() {
         <div className="mx-auto max-w-7xl px-6">
           <div className="reveal flex flex-wrap items-end justify-between gap-6">
             <div>
-              <p className="eyebrow text-accent">Stay</p>
-              <h2 className="mt-3 text-4xl md:text-6xl">Villas & Suites</h2>
+              <p className="eyebrow text-accent">{t("Stay")}</p>
+              <h2 className="mt-3 text-4xl md:text-6xl">{t("Villas & Suites")}</h2>
             </div>
-            <p className="max-w-sm text-muted-foreground">Teak, songket and stone — every room frames the jungle or the sea.</p>
+            <p className="max-w-sm text-muted-foreground">{t("Teak, songket and stone — every room frames the jungle or the sea.")}</p>
           </div>
           <div className="mt-14 grid gap-8 md:grid-cols-3">
             {rooms.map((r, i) => (
               <article key={r.name} className="reveal group" style={{ transitionDelay: `${i * 0.12}s` }}>
                 <div className="aspect-[4/5] overflow-hidden">
-                  <img src={r.img} alt={r.name} loading="lazy" className="h-full w-full object-cover transition duration-[1.4s] group-hover:scale-105" />
+                  <img src={r.img} alt={t(r.name)} loading="lazy" className="h-full w-full object-cover transition duration-[1.4s] group-hover:scale-105" />
                 </div>
-                <h3 className="mt-5 text-2xl md:text-3xl">{r.name}</h3>
-                <div className="mt-2 flex items-center justify-between border-t pt-3 text-sm text-muted-foreground">
-                  <span>{r.size} · {r.view}</span>
-                  <span className="whitespace-nowrap">from <b className="font-semibold text-foreground">RM {r.price}</b></span>
+                <h3 className="mt-5 text-2xl md:text-3xl">{t(r.name)}</h3>
+                <div className="mt-2 flex items-center justify-between gap-3 border-t pt-3 text-sm text-muted-foreground">
+                  <span>{r.size} · {t(r.view)}</span>
+                  <span className="whitespace-nowrap">{t("from")} <b className="font-semibold text-foreground">RM {r.price}</b></span>
                 </div>
               </article>
             ))}
@@ -156,17 +158,16 @@ export default function Index() {
       {/* Dining */}
       <section id="dine" className="relative bg-ink text-ink-foreground">
         <div className="grid md:grid-cols-2">
-          <img src={dining} alt="Nasi kerabu and grilled prawns" loading="lazy" className="h-[60vh] w-full object-cover md:h-full" />
+          <img src={dining} alt={t("Nasi kerabu and grilled prawns")} loading="lazy" className="h-[60vh] w-full object-cover md:h-full" />
           <div className="reveal flex flex-col justify-center px-6 py-20 md:px-16 md:py-32">
-            <p className="eyebrow text-gold">Dine</p>
-            <h2 className="mt-4 text-4xl leading-tight md:text-6xl">Dapur Serai</h2>
+            <p className="eyebrow text-gold">{t("Dine")}</p>
+            <h2 className="mt-4 text-4xl leading-tight md:text-6xl">{t("Dapur Serai")}</h2>
             <p className="mt-6 max-w-md leading-relaxed opacity-80">
-              Heirloom recipes from the Malay peninsula, reimagined over open flame. Butterfly-pea nasi kerabu, tiger prawns
-              grilled in banana leaf, and a kuih trolley that is worth the journey alone.
+              {t("Heirloom recipes from the Malay peninsula, reimagined over open flame. Butterfly-pea nasi kerabu, tiger prawns grilled in banana leaf, and a kuih trolley that is worth the journey alone.")}
             </p>
             <ul className="mt-10 space-y-4 border-t border-ink-foreground/15 pt-8 text-sm">
               {[["Dapur Serai", "Malay fine dining · Dinner"], ["Ombak", "Beach grill · All day"], ["Teh Tarik Lounge", "Afternoon tea · Cocktails"]].map(([a, b]) => (
-                <li key={a} className="flex justify-between"><span className="font-display text-xl">{a}</span><span className="opacity-60">{b}</span></li>
+                <li key={a} className="flex items-baseline justify-between gap-4"><span className="font-display text-xl">{t(a)}</span><span className="text-end opacity-60">{t(b)}</span></li>
               ))}
             </ul>
           </div>
@@ -176,30 +177,29 @@ export default function Index() {
       {/* Wellness */}
       <section id="wellness" className="mx-auto grid max-w-7xl items-center gap-14 px-6 py-28 md:grid-cols-2 md:py-40">
         <div className="reveal order-2 md:order-1">
-          <p className="eyebrow text-accent">Wellness</p>
-          <h2 className="mt-4 text-4xl leading-tight md:text-6xl">Spa Rimba</h2>
+          <p className="eyebrow text-accent">{t("Wellness")}</p>
+          <h2 className="mt-4 text-4xl leading-tight md:text-6xl">{t("Spa Rimba")}</h2>
           <p className="mt-6 max-w-md leading-relaxed text-muted-foreground">
-            Six open-air pavilions beside a forest stream. Our therapists draw on traditional urut massage, jamu herbal
-            tonics and warm pandan compresses.
+            {t("Six open-air pavilions beside a forest stream. Our therapists draw on traditional urut massage, jamu herbal tonics and warm pandan compresses.")}
           </p>
-          <a href={WA_URL} target="_blank" rel="noopener" className="mt-10 inline-block border-b border-accent pb-1 text-xs uppercase tracking-[0.25em]">Ask about treatments →</a>
+          <a href={waUrl(t("Hello Serai Tanjung, I'd like to ask about spa treatments."))} target="_blank" rel="noopener" className="mt-10 inline-block border-b border-accent pb-1 text-xs uppercase tracking-[0.25em]">{t("Ask about treatments")} <span className="inline-block rtl:-scale-x-100" aria-hidden="true">→</span></a>
         </div>
         <div className="reveal order-1 md:order-2">
-          <img src={spa} alt="Stone bath with frangipani in a forest spa pavilion" loading="lazy" className="aspect-[4/5] w-full object-cover" />
+          <img src={spa} alt={t("Stone bath with frangipani in a forest spa pavilion")} loading="lazy" className="aspect-[4/5] w-full object-cover" />
         </div>
       </section>
 
       {/* Experiences */}
       <section id="experiences" className="bg-primary py-28 text-primary-foreground">
         <div className="mx-auto max-w-7xl px-6">
-          <p className="eyebrow reveal text-gold">Experiences</p>
-          <h2 className="reveal mt-3 max-w-2xl text-4xl md:text-6xl">Langkawi, the way locals know it.</h2>
+          <p className="eyebrow reveal text-gold">{t("Experiences")}</p>
+          <h2 className="reveal mt-3 max-w-2xl text-4xl md:text-6xl">{t("Langkawi, the way locals know it.")}</h2>
           <div className="mt-16 grid gap-px bg-primary-foreground/15 sm:grid-cols-2 lg:grid-cols-4">
             {experiences.map((e, i) => (
               <div key={e.t} className="reveal bg-primary p-8 transition hover:bg-ink" style={{ transitionDelay: `${i * 0.1}s` }}>
                 <span className="font-display text-5xl text-gold">0{i + 1}</span>
-                <h3 className="mt-6 text-2xl">{e.t}</h3>
-                <p className="mt-3 text-sm opacity-75">{e.d}</p>
+                <h3 className="mt-6 text-2xl">{t(e.t)}</h3>
+                <p className="mt-3 text-sm opacity-75">{t(e.d)}</p>
               </div>
             ))}
           </div>
@@ -209,23 +209,23 @@ export default function Index() {
       {/* Offers + testimonial */}
       <section id="offers" className="mx-auto max-w-7xl px-6 py-28">
         <div className="grid gap-8 md:grid-cols-3">
-          {[
+          {([
             ["Stay Longer", "Fourth night on us, with daily breakfast at Ombak.", "Save 25%"],
             ["Honeymoon Ritual", "Pool villa, couples' urut and a beach dinner for two.", "From RM 6,900"],
             ["Family Escape", "Kids under 12 stay & dine free, plus jungle camp.", "Kids free"],
-          ].map(([t, d, b]) => (
-            <div key={t} className="reveal border bg-card p-10 transition hover:-translate-y-1 hover:shadow-xl">
-              <span className="eyebrow text-accent">{b}</span>
-              <h3 className="mt-4 text-3xl">{t}</h3>
-              <p className="mt-3 text-sm text-muted-foreground">{d}</p>
+          ] as [string, string, string][]).map(([ti, d, b]) => (
+            <div key={ti} className="reveal border bg-card p-10 transition hover:-translate-y-1 hover:shadow-xl">
+              <span className="eyebrow text-accent">{t(b)}</span>
+              <h3 className="mt-4 text-3xl">{t(ti)}</h3>
+              <p className="mt-3 text-sm text-muted-foreground">{t(d)}</p>
             </div>
           ))}
         </div>
         <blockquote className="reveal mx-auto mt-28 max-w-3xl text-center">
           <p className="font-display text-3xl italic leading-snug md:text-5xl">
-            “The most graceful resort in Southeast Asia — service that feels like family.”
+            {t("“The most graceful resort in Southeast Asia — service that feels like family.”")}
           </p>
-          <footer className="eyebrow mt-8 text-muted-foreground">Asia Travel Review · Gold List</footer>
+          <footer className="eyebrow mt-8 text-muted-foreground">{t("Asia Travel Review · Gold List")}</footer>
         </blockquote>
       </section>
 
@@ -234,24 +234,24 @@ export default function Index() {
         <div className="mx-auto grid max-w-7xl gap-12 px-6 py-20 md:grid-cols-4">
           <div className="md:col-span-2">
             <div className="font-display text-4xl">Serai Tanjung</div>
-            <p className="mt-4 max-w-sm text-sm opacity-70">Jalan Teluk Datai, 07000 Langkawi, Kedah Darul Aman, Malaysia</p>
+            <p className="mt-4 max-w-sm text-sm opacity-70">{t("Jalan Teluk Datai, 07000 Langkawi, Kedah Darul Aman, Malaysia")}</p>
           </div>
           <div className="text-sm opacity-80">
-            <p className="eyebrow mb-4 text-gold">Contact</p>
-            <p><a href={WA_URL} target="_blank" rel="noopener" className="transition hover:text-gold">WhatsApp {WA_DISPLAY}</a></p>
-            <p><a href="tel:+601151198497" className="transition hover:text-gold">Call {WA_DISPLAY}</a></p>
+            <p className="eyebrow mb-4 text-gold">{t("Contact")}</p>
+            <p><a href={wa} target="_blank" rel="noopener" className="transition hover:text-gold">WhatsApp <bdi dir="ltr">{WA_DISPLAY}</bdi></a></p>
+            <p><a href="tel:+601151198497" className="transition hover:text-gold">{t("Call")} <bdi dir="ltr">{WA_DISPLAY}</bdi></a></p>
             <p><a href="mailto:stay@seraitanjung.my" className="transition hover:text-gold">stay@seraitanjung.my</a></p>
           </div>
           <form onSubmit={(e) => e.preventDefault()} className="text-sm">
-            <p className="eyebrow mb-4 text-gold">Newsletter</p>
+            <label htmlFor="newsletter-email" className="eyebrow mb-4 block text-gold">{t("Newsletter")}</label>
             <div className="flex border-b border-ink-foreground/30">
-              <input type="email" placeholder="Your email" className="flex-1 bg-transparent py-2 outline-none placeholder:text-ink-foreground/40" />
-              <button className="text-gold">→</button>
+              <input id="newsletter-email" type="email" placeholder={t("Your email")} className="min-w-0 flex-1 bg-transparent py-2 outline-none placeholder:text-ink-foreground/40" />
+              <button className="px-2 text-gold" aria-label={t("Subscribe")}><span className="inline-block rtl:-scale-x-100" aria-hidden="true">→</span></button>
             </div>
           </form>
         </div>
-        <div className="border-t border-ink-foreground/10 py-6 text-center text-xs opacity-50">
-          © 2026 Serai Tanjung Resorts Sdn. Bhd. · A fictional brand for demonstration · photos are illustrative
+        <div className="border-t border-ink-foreground/10 px-6 py-6 text-center text-xs opacity-50">
+          {t("© 2026 Serai Tanjung Resorts Sdn. Bhd. · A fictional brand for demonstration · photos are illustrative")}
         </div>
       </footer>
     </div>

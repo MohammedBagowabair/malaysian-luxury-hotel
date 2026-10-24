@@ -1,13 +1,15 @@
-import { WA_URL } from "@/lib/whatsapp";
+import { waUrl, WA_DEFAULT_MSG } from "@/lib/whatsapp";
+import { useI18n } from "@/lib/i18n";
 
 export function WhatsAppButton() {
+  const { t } = useI18n();
   return (
     <a
-      href={WA_URL}
+      href={waUrl(t(WA_DEFAULT_MSG))}
       target="_blank"
       rel="noopener"
-      aria-label="Chat with us on WhatsApp"
-      className="fixed bottom-5 right-5 z-[60] flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-lg shadow-black/25 transition hover:scale-105"
+      aria-label={t("Chat with us on WhatsApp")}
+      className="fixed bottom-5 end-5 z-[60] flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-lg shadow-black/25 transition hover:scale-105"
     >
       <svg viewBox="0 0 32 32" width="28" height="28" fill="currentColor" aria-hidden="true">
         <path d="M16.04 3C9 3 3.3 8.66 3.3 15.66c0 2.24.6 4.43 1.73 6.35L3 29l7.2-1.88a12.8 12.8 0 0 0 5.84 1.42h.01c7.03 0 12.74-5.66 12.74-12.66C28.79 8.66 23.07 3 16.04 3Zm0 23.4h-.01a10.6 10.6 0 0 1-5.4-1.47l-.39-.23-4.27 1.11 1.14-4.14-.25-.42a10.47 10.47 0 0 1-1.62-5.6c0-5.82 4.76-10.55 10.8-10.55 2.88 0 5.6 1.12 7.63 3.14a10.43 10.43 0 0 1 3.16 7.45c0 5.82-4.85 10.7-10.8 10.7Zm5.92-7.9c-.32-.16-1.92-.94-2.21-1.05-.3-.11-.51-.16-.73.16-.21.32-.83 1.05-1.02 1.26-.19.21-.38.24-.7.08-.32-.16-1.36-.5-2.6-1.6-.96-.85-1.6-1.9-1.8-2.22-.19-.32-.02-.49.14-.65.15-.14.32-.37.48-.56.16-.19.21-.32.32-.53.1-.21.05-.4-.03-.56-.08-.16-.72-1.73-.99-2.37-.26-.62-.53-.54-.73-.55h-.62c-.21 0-.56.08-.85.4-.3.32-1.12 1.09-1.12 2.66s1.15 3.09 1.31 3.3c.16.21 2.26 3.44 5.48 4.82.77.33 1.37.53 1.83.68.77.24 1.47.21 2.02.13.62-.09 1.92-.78 2.19-1.54.27-.75.27-1.4.19-1.54-.08-.13-.29-.21-.61-.37Z" />
