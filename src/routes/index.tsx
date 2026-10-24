@@ -41,6 +41,7 @@ const experiences = [
 
 function useReveal() {
   useEffect(() => {
+    document.documentElement.classList.add("js-reveal");
     const els = document.querySelectorAll(".reveal");
     const io = new IntersectionObserver(
       (es) => es.forEach((e) => e.isIntersecting && e.target.classList.add("in")),
@@ -64,7 +65,7 @@ function Index() {
   }, []);
 
   return (
-    <div className="overflow-x-hidden">
+    <div className="overflow-x-hidden" suppressHydrationWarning>
       {/* Header */}
       <header
         className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${
@@ -193,11 +194,11 @@ function Index() {
                 <div className="aspect-[4/5] overflow-hidden">
                   <img src={r.img} alt={r.name} loading="lazy" className="h-full w-full object-cover transition duration-[1.4s] group-hover:scale-105" />
                 </div>
-                <div className="mt-5 flex items-baseline justify-between">
-                  <h3 className="text-2xl md:text-3xl">{r.name}</h3>
-                  <span className="text-sm text-muted-foreground">from <b className="font-semibold text-foreground">RM {r.price}</b></span>
+                <h3 className="mt-5 text-2xl md:text-3xl">{r.name}</h3>
+                <div className="mt-2 flex items-center justify-between border-t pt-3 text-sm text-muted-foreground">
+                  <span>{r.size} · {r.view}</span>
+                  <span className="whitespace-nowrap">from <b className="font-semibold text-foreground">RM {r.price}</b></span>
                 </div>
-                <p className="mt-1 text-sm text-muted-foreground">{r.size} · {r.view}</p>
               </article>
             ))}
           </div>
