@@ -56,7 +56,6 @@ function Index() {
   useReveal();
   const [scrolled, setScrolled] = useState(false);
   const [menu, setMenu] = useState(false);
-  const [booked, setBooked] = useState(false);
   useEffect(() => {
     const f = () => setScrolled(window.scrollY > 60);
     f();
@@ -85,8 +84,8 @@ function Index() {
             ))}
           </nav>
           <div className="flex items-center gap-4">
-            <a href="#book" className="hidden border border-gold px-5 py-2.5 text-xs uppercase tracking-[0.2em] text-gold transition hover:bg-gold hover:text-ink sm:inline-block">
-              Reserve
+            <a href="#contact" className="hidden border border-gold px-5 py-2.5 text-xs uppercase tracking-[0.2em] text-gold transition hover:bg-gold hover:text-ink sm:inline-block">
+              Contact
             </a>
             <button aria-label="Menu" onClick={() => setMenu(!menu)} className="lg:hidden">
               <div className="space-y-1.5">
@@ -112,7 +111,7 @@ function Index() {
       <section id="top" className="relative flex min-h-[100svh] items-end overflow-hidden bg-ink text-ink-foreground">
         <img src={hero} alt="Infinity pool at sunset overlooking the Andaman Sea" width={1920} height={1088} className="animate-slowzoom absolute inset-0 h-full w-full object-cover" />
         <div className="veil absolute inset-0" />
-        <div className="relative mx-auto w-full max-w-7xl px-6 pb-40 md:pb-48">
+        <div className="relative mx-auto w-full max-w-7xl px-6 pb-24 md:pb-28">
           <p className="eyebrow animate-rise text-gold">Est. 1998 · Pantai Datai</p>
           <h1 className="animate-rise mt-5 max-w-4xl text-5xl leading-[1.02] md:text-8xl" style={{ animationDelay: ".15s" }}>
             Where the rainforest <em className="text-gold">meets</em> the sea.
@@ -121,39 +120,6 @@ function Index() {
             Eighty-two villas and suites tucked into ten-million-year-old jungle on Langkawi's northwest shore.
           </p>
         </div>
-
-        {/* Booking bar */}
-        <form
-          id="book"
-          onSubmit={(e) => {
-            e.preventDefault();
-            setBooked(true);
-          }}
-          className="absolute inset-x-4 bottom-6 mx-auto grid max-w-5xl grid-cols-2 gap-px overflow-hidden bg-border/30 text-foreground shadow-2xl md:inset-x-6 md:grid-cols-5"
-        >
-          {[
-            { l: "Check in", t: "date" },
-            { l: "Check out", t: "date" },
-          ].map((f) => (
-            <label key={f.l} className="bg-card px-5 py-3">
-              <span className="eyebrow block text-[0.6rem] text-muted-foreground">{f.l}</span>
-              <input required type={f.t} className="w-full bg-transparent text-sm outline-none" />
-            </label>
-          ))}
-          <label className="bg-card px-5 py-3">
-            <span className="eyebrow block text-[0.6rem] text-muted-foreground">Guests</span>
-            <select className="w-full bg-transparent text-sm outline-none">
-              <option>2 Adults</option><option>1 Adult</option><option>2 Adults, 1 Child</option><option>4 Adults</option>
-            </select>
-          </label>
-          <label className="bg-card px-5 py-3">
-            <span className="eyebrow block text-[0.6rem] text-muted-foreground">Promo</span>
-            <input placeholder="Optional" className="w-full bg-transparent text-sm outline-none" />
-          </label>
-          <button className="col-span-2 bg-accent px-5 py-4 text-xs font-semibold uppercase tracking-[0.2em] text-accent-foreground transition hover:bg-gold md:col-span-1">
-            {booked ? "Checking availability ✓" : "Check availability"}
-          </button>
-        </form>
       </section>
 
       {/* Intro */}
@@ -234,7 +200,7 @@ function Index() {
             Six open-air pavilions beside a forest stream. Our therapists draw on traditional urut massage, jamu herbal
             tonics and warm pandan compresses.
           </p>
-          <a href="#book" className="mt-10 inline-block border-b border-accent pb-1 text-xs uppercase tracking-[0.25em]">Book a treatment →</a>
+          <a href="#contact" className="mt-10 inline-block border-b border-accent pb-1 text-xs uppercase tracking-[0.25em]">Ask about treatments →</a>
         </div>
         <div className="reveal order-1 md:order-2">
           <img src={spa} alt="Stone bath with frangipani in a forest spa pavilion" loading="lazy" className="aspect-[4/5] w-full object-cover" />
@@ -282,7 +248,7 @@ function Index() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-ink text-ink-foreground">
+      <footer id="contact" className="bg-ink text-ink-foreground">
         <div className="mx-auto grid max-w-7xl gap-12 px-6 py-20 md:grid-cols-4">
           <div className="md:col-span-2">
             <div className="font-display text-4xl">Serai Tanjung</div>
@@ -290,8 +256,8 @@ function Index() {
           </div>
           <div className="text-sm opacity-80">
             <p className="eyebrow mb-4 text-gold">Contact</p>
-            <p>+60 4 950 0000</p>
-            <p>stay@seraitanjung.my</p>
+            <p><a href="tel:+6049500000" className="transition hover:text-gold">+60 4 950 0000</a></p>
+            <p><a href="mailto:stay@seraitanjung.my" className="transition hover:text-gold">stay@seraitanjung.my</a></p>
           </div>
           <form onSubmit={(e) => e.preventDefault()} className="text-sm">
             <p className="eyebrow mb-4 text-gold">Newsletter</p>
